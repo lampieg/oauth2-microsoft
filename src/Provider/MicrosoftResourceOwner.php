@@ -28,7 +28,7 @@ class MicrosoftResourceOwner implements ResourceOwnerInterface
      */
     public function getId()
     {
-        return $this->response['id'] ?: null;
+        return $this->response['sub'] ?: null;
     }
 
     /**
@@ -38,7 +38,7 @@ class MicrosoftResourceOwner implements ResourceOwnerInterface
      */
     public function getEmail()
     {
-        return $this->response['emails']['preferred'] ?: null;
+		return $this->response['email'] ?: null;
     }
 
     /**

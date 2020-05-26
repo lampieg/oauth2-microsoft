@@ -105,8 +105,32 @@ class Microsoft extends AbstractProvider
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        $uri = new Uri($this->urlResourceOwnerDetails);
-
-        return (string) Uri::withQueryValue($uri, 'access_token', (string) $token);
+        //$uri = new Uri($this->urlResourceOwnerDetails);
+		return $this->urlResourceOwnerDetails;
+        //return (string) Uri::withQueryValue($uri, 'access_token', (string) $token);
     }
+	
+	
+	/**
+     * Requests and returns the resource owner of given access token.
+     *
+     * @param  AccessToken $token
+     * @return ResourceOwnerInterface
+     */
+	 
+    public function getResourceOwner($token)
+	{
+		$idtoken = $token->getValues()['id_token'];
+		$idtoken = explode(".", $idtoken);
+
+		foreach($idtoken as &$part):
+		$part = json_decode(base64_decode($part), true);
+		endforeach;
+		if($idtoken[0]['typ'] == "JWT"):
+			$response = $idtoken[1];
+		else:
+			$response = array();
+		endif;
+		return $this->createResourceOwner($response, $token);
+	}
 }
